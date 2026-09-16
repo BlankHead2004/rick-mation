@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rick-mation/schemas/storyboard-scene.schema.json",
+  "title": "StoryboardScene",
+  "description": "One scene of storyboard.json. See references/04-storyboard-dsl-spec.md. A full storyboard.json is an array/object of these plus project-level metadata. Reject (do not render) any scene failing this schema.",
+  "type": "object",
+  "required": ["id", "start", "duration", "purpose", "layout", "elements", "transitions"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9_]+$" },
+    "start": { "type": "number", "minimum": 0 },
+    "duration": { "type": "number", "exclusiveMinimum": 0 },
+    "purpose": {
+      "type": "string",
+      "description": "One dominant communication purpose for this scene. Must not describe two unrelated ideas."
+    },
+    "narration": {
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string" },
+        "variant": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "elements": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/element" }
+    },
+    "transitions": {
+      "type": "object",
+      "required": ["in", "out"],
+      "properties": {
+        "in": { "$ref": "#/definitions/transitionName" },
+        "out": { "$ref": "#/definitions/transitionName" }
+      },
+      "additionalProperties": false
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "music_level_db": { "type": "number" },
+        "sfx": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "timing": {
+      "type": "object",
+      "properties": {
+        "beats": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/beat" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "definitions": {
+    "elementType": {
+      "type": "string",
+      "enum": [
+        "text", "rich_text", "image", "video", "svg", "icon", "card", "group",
+        "line", "arrow", "chart", "table", "metric", "badge", "logo", "shape",
+        "mask", "caption", "device_frame", "browser_frame"
+      ]
+    },
+    "transitionName": {
+      "type": "string",
+      "enum": [
+        "cut", "fade", "soft_reveal", "slide_left", "slide_right", "slide_up",
+        "slide_down", "wipe", "mask_reveal", "card_expand", "zoom_through",
+        "morph_layout", "content_swap", "panel_split", "panel_merge"
+      ]
+    },
+    "animationPreset": {
+      "type": "string",
+      "description": "Must come from the registered set in references/13-motion-presets.md. Extend deliberately at the project level, never invent ad hoc per scene.",
+      "enum": [
+        "fade", "fade_slide_up", "fade_slide_down", "scale_soft", "mask_reveal",
+        "stagger_children", "card_expand", "panel_split", "panel_merge",
+        "morph_layout", "content_swap", "zoom_through", "slide_out",
+        "scale_down", "mask_close", "slow_float", "micro_scale", "subtle_pan",
+        "subtle_float"
+      ]
+    },
+    "animation": {
+      "type": "object",
+      "properties": {
+        "enter": {
+          "type": "object",
+          "properties": {
+            "preset": { "$ref": "#/definitions/animationPreset" },
+            "duration_frames": { "type": "integer", "minimum": 1 },
+            "delay_frames": { "type": "integer", "minimum": 0 },
+            "stagger_frames": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "active": {
+          "type": "object",
+          "properties": {
+            "preset": { "$ref": "#/definitions/animationPreset" }
+          },
+          "additionalProperties": false
+        },
+        "exit": {
+          "type": "object",
+          "properties": {
+            "preset": { "$ref": "#/definitions/animationPreset" },
+            "duration_frames": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "position": {
+      "type": "object",
+      "description": "Prefer semantic anchoring over raw absolute coordinates (references/04-storyboard-dsl-spec.md). Every element must resolve to either 'anchor' (a layout-template zone) or a justified 'absolute' block — a position object with neither is the 'floating/random placement' defect the harness explicitly forbids.",
+      "anyOf": [
+        { "required": ["anchor"] },
+        { "required": ["absolute"] }
+      ],
+      "properties": {
+        "anchor": {
+          "type": "string",
+          "description": "A zone name exposed by the scene's layout.type/layout.variant — see references/17-layout-template-gallery.md.",
+          "examples": [
+            "top_left", "top_center", "top_right",
+            "center_left", "center", "center_right",
+            "bottom_left", "bottom_center", "bottom_right"
+          ]
+        },
+        "offset": {
+          "type": "object",
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          },
+          "additionalProperties": false
+        },
+        "max_width": { "type": "number" },
+        "absolute": {
+          "type": "object",
+          "description": "Only for special compositions where semantic anchoring cannot express the intent. Must be paired with a sibling 'positionReason' on the element explaining why.",
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "width": { "type": "number" },
+            "height": { "type": "number" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "element": {
+      "type": "object",
+      "required": ["id", "type", "position"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "$ref": "#/definitions/elementType" },
+        "content": {},
+        "position": { "$ref": "#/definitions/position" },
+        "positionReason": {
+          "type": "string",
+          "description": "Required when position.absolute is used — the stated reason semantic anchoring couldn't express the intent."
+        },
+        "necessityReason": {
+          "type": "string",
+          "description": "Why this scene's purpose requires this element. Recommended for all visual/media element types (image, video, svg, chart, table, icon, logo, device_frame, browser_frame) to make the Necessity principle (references/07-asset-pipeline.md) auditable — an unjustified visual element is a filler-asset QA finding."
+        },
+        "animation": { "$ref": "#/definitions/animation" },
+        "assetId": { "type": "string" }
+      },
+      "if": {
+        "properties": {
+          "position": {
+            "type": "object",
+            "required": ["absolute"]
+          }
+        },
+        "required": ["position"]
+      },
+      "then": {
+        "required": ["positionReason"]
+      },
+      "additionalProperties": true
+    },
+    "beat": {
+      "type": "object",
+      "required": ["at", "action"],
+      "properties": {
+        "at": { "type": "number", "minimum": 0 },
+        "action": { "type": "string" },
+        "target": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

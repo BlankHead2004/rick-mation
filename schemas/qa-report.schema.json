@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rick-mation/schemas/qa-report.schema.json",
+  "title": "QAReport",
+  "description": "qa_report.json. See references/11-qa-and-validation.md. A final render must not proceed while any BLOCKER/ERROR finding is unresolved.",
+  "type": "object",
+  "required": ["structural", "visual", "audio", "findings", "final_checklist"],
+  "properties": {
+    "structural": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "boolean" },
+        "checked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "visual": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "boolean" },
+        "sampled_frames": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Timestamps sampled — must include scene boundaries, animation peaks, transition boundaries, and every-N-seconds coverage, never just first/last frame."
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "boolean" }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "issue", "location"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["BLOCKER", "ERROR", "WARNING", "NOTE"]
+          },
+          "issue": {
+            "type": "string",
+            "description": "The observable issue only — never a vague judgment like 'looks good' or 'needs polish'."
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "scene_id": { "type": "string" },
+              "element_id": { "type": "string" },
+              "timestamp": { "type": "number" }
+            }
+          },
+          "minimal_correction": {
+            "type": "string",
+            "description": "The smallest fix that resolves this finding."
+          },
+          "resolved": { "type": "boolean" }
+        }
+      }
+    },
+    "final_checklist": {
+      "type": "object",
+      "properties": {
+        "duration_correct": { "type": "boolean" },
+        "fps_correct": { "type": "boolean" },
+        "dimensions_correct": { "type": "boolean" },
+        "audio_present": { "type": "boolean" },
+        "narration_complete": { "type": "boolean" },
+        "all_required_scenes_present": { "type": "boolean" },
+        "all_required_assets_present": { "type": "boolean" },
+        "no_blocker_or_error_findings": { "type": "boolean" },
+        "title_safe_margins_respected": { "type": "boolean" },
+        "text_readable_at_target_resolution": { "type": "boolean" },
+        "output_encoded_successfully": { "type": "boolean" }
+      }
+    }
+  }
+}

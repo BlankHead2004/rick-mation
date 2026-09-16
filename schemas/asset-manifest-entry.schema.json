@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rick-mation/schemas/asset-manifest-entry.schema.json",
+  "title": "AssetManifestEntry",
+  "description": "One entry of asset_manifest.json. See references/07-asset-pipeline.md.",
+  "type": "object",
+  "required": ["id", "path", "type", "source", "hash"],
+  "additionalProperties": true,
+  "properties": {
+    "id": { "type": "string" },
+    "path": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["video", "image", "svg", "audio", "data", "font", "logo", "icon"]
+    },
+    "duration": { "type": "number", "minimum": 0 },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "fps": { "type": "number", "minimum": 1 },
+    "source": {
+      "type": "string",
+      "enum": ["user", "source_document", "generated_vector", "generated_still", "external_licensed", "synthetic_filler"],
+      "description": "Selection-order priority: user > source_document > generated_vector > generated_still > external_licensed > synthetic_filler (references/07-asset-pipeline.md)."
+    },
+    "hash": { "type": "string" },
+    "safe_usage": { "type": "boolean" },
+    "notes": { "type": "string" },
+    "provenance": {
+      "type": "object",
+      "description": "Required when source is generated_vector or generated_still.",
+      "properties": {
+        "prompt": { "type": "string" },
+        "model": { "type": "string" },
+        "seed": { "type": ["string", "number", "null"] },
+        "version": { "type": "string" }
+      }
+    },
+    "background_treatment": {
+      "type": "object",
+      "description": "Set for image/video assets with a plain, busy, or otherwise unappealing/inconsistent background. See references/07-asset-pipeline.md (Background cleanup). An asset flagged 'needs_cleanup' must not be composited until it becomes 'removed_chromakey' or 'removed_ai_matte' (or 'not_applicable' if reviewed and judged fine as-is).",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_applicable", "flagged_needs_cleanup", "removed_chromakey", "removed_ai_matte"]
+        },
+        "method": { "type": "string", "description": "e.g. ffmpeg colorkey, ffmpeg chromakey, rembg, remove.bg API, Photoroom API." },
+        "tool_version": { "type": "string" }
+      },
+      "required": ["status"]
+    }
+  }
+}

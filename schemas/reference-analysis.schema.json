@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rick-mation/schemas/reference-analysis.schema.json",
+  "title": "ReferenceAnalysis",
+  "description": "Output of applying the reference analysis contract (references/02-creative-brief-intake.md) to one reference file. Every observation must be an implementation rule, never a vague adjective like 'clean' or 'modern'.",
+  "type": "object",
+  "required": [
+    "layout_language",
+    "typography_language",
+    "color_language",
+    "motion_language",
+    "transition_families",
+    "media_treatment",
+    "information_density",
+    "pacing_characteristics",
+    "audio_characteristics",
+    "things_to_avoid_copying_literally"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "layout_language": { "type": "array", "items": { "type": "string" } },
+    "typography_language": { "type": "array", "items": { "type": "string" } },
+    "color_language": { "type": "array", "items": { "type": "string" } },
+    "motion_language": { "type": "array", "items": { "type": "string" } },
+    "transition_families": { "type": "array", "items": { "type": "string" } },
+    "media_treatment": { "type": "array", "items": { "type": "string" } },
+    "information_density": { "type": "array", "items": { "type": "string" } },
+    "pacing_characteristics": { "type": "array", "items": { "type": "string" } },
+    "audio_characteristics": { "type": "array", "items": { "type": "string" } },
+    "things_to_avoid_copying_literally": { "type": "array", "items": { "type": "string" } }
+  }
+}

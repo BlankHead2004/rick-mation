@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rick-mation/schemas/audio-manifest.schema.json",
+  "title": "AudioManifest",
+  "description": "audio_manifest.json. See references/08-audio-and-voiceover.md.",
+  "type": "object",
+  "required": ["voice_profile", "scenes"],
+  "properties": {
+    "voice_profile": {
+      "type": "object",
+      "description": "Stable voice profile maintained across the whole project. Must be explicitly confirmed with the user before Phase 5 generation (references/08-audio-and-voiceover.md) — never silently defaulted. If the user has no preference, 'gemini' (Gemini API TTS, e.g. gemini-2.5-flash-preview-tts / gemini-3.1-flash-tts-preview) is the recommended suggestion to offer, for its free tier — but it must still be offered and confirmed, not assumed.",
+      "properties": {
+        "provider": { "type": "string", "examples": ["gemini", "elevenlabs", "azure", "openai", "amazon-polly"] },
+        "voice_id": { "type": "string", "examples": ["Kore"] },
+        "reference": { "type": ["string", "null"] },
+        "confirmed_by_user": { "type": "boolean", "description": "Must be true before this profile is used to generate audio." }
+      },
+      "required": ["provider", "voice_id"]
+    },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["scene_id", "file", "duration"],
+        "properties": {
+          "scene_id": { "type": "string" },
+          "file": { "type": "string", "examples": ["scene_01.wav"] },
+          "duration": { "type": "number", "minimum": 0 },
+          "sentence_timestamps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["text", "start", "end"],
+              "properties": {
+                "text": { "type": "string" },
+                "start": { "type": "number" },
+                "end": { "type": "number" }
+              }
+            }
+          },
+          "phrase_timestamps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["phrase", "start", "end"],
+              "properties": {
+                "phrase": { "type": "string" },
+                "start": { "type": "number" },
+                "end": { "type": "number" }
+              }
+            }
+          },
+          "emphasis_cues": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "music": {
+      "type": "object",
+      "properties": {
+        "track": { "type": "string" },
+        "ducking": {
+          "type": "object",
+          "properties": {
+            "narration_start_db": { "type": "number" },
+            "narration_end_restore_ms": { "type": "number" }
+          }
+        }
+      }
+    },
+    "sfx_vocabulary": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Limited vocabulary, e.g. soft_click, ui_tick, subtle_whoosh, soft_impact, reveal_tone."
+    },
+    "mix_checks": {
+      "type": "object",
+      "properties": {
+        "no_clipping": { "type": "boolean" },
+        "speech_intelligibility": { "type": "boolean" },
+        "no_sudden_level_jumps": { "type": "boolean" },
+        "correct_channel_layout": { "type": "boolean" },
+        "loudness_target_lufs": { "type": "number" }
+      }
+    }
+  }
+}

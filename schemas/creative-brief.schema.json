@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://rick-mation/schemas/creative-brief.schema.json",
+  "title": "CreativeBrief",
+  "description": "Intake contract for user creative intent. See references/02-creative-brief-intake.md. Only 'purpose' and 'topic' are truly required; everything else should be defaulted conservatively rather than invented as a high-level creative objective.",
+  "type": "object",
+  "required": ["purpose", "topic"],
+  "additionalProperties": true,
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "description": "What this video needs to achieve."
+    },
+    "topic": {
+      "type": "string",
+      "description": "Subject of the video."
+    },
+    "audience": {
+      "type": "string",
+      "description": "Intended viewers."
+    },
+    "tone": {
+      "type": "string",
+      "description": "Tone as described by the user. Never invented."
+    },
+    "duration_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "aspect_ratio": {
+      "type": "string",
+      "examples": ["16:9", "9:16", "1:1", "4:5"]
+    },
+    "resolution": {
+      "type": "string",
+      "pattern": "^[0-9]+x[0-9]+$",
+      "examples": ["1920x1080", "1080x1920"]
+    },
+    "language": {
+      "type": "string"
+    },
+    "voiceover": {
+      "type": "object",
+      "properties": {
+        "required": { "type": "boolean" },
+        "voice_reference": { "type": ["string", "null"] }
+      },
+      "required": ["required"],
+      "additionalProperties": false
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paths/URLs to reference videos or images. Only define reusable visual/motion rules when reference matching is explicitly requested."
+    },
+    "assets": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Paths to user-provided source assets."
+    },
+    "content_sources": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Source documents to extract facts from before creative treatment."
+    },
+    "visual_preferences": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "visual_restrictions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "must_include": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "must_avoid": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "cta": {
+      "type": ["string", "null"],
+      "description": "Call to action. Do not invent one if the user did not request it."
+    }
+  }
+}
