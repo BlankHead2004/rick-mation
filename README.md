@@ -52,13 +52,13 @@ The skill is a folder named `rick-mation` that contains `SKILL.md`. Put that fol
 ### Claude Code (native)
 
 ```powershell
-git clone https://github.com/BlankHead/rick-mation.git "$env:USERPROFILE\.claude\skills\rick-mation"
+git clone https://github.com/BlankHead2004/rick-mation.git "$env:USERPROFILE\.claude\skills\rick-mation"
 ```
 
 macOS / Linux:
 
 ```bash
-git clone https://github.com/BlankHead/rick-mation.git ~/.claude/skills/rick-mation
+git clone https://github.com/BlankHead2004/rick-mation.git ~/.claude/skills/rick-mation
 ```
 
 Restart Claude Code or start a new session. Confirm with `/skills`. Trigger by asking for a motion-graphics video, or by naming **rick-mation**.
@@ -68,13 +68,13 @@ If Claude Code was previously given a symlink at that path, remove it first (`rm
 ### Cursor
 
 ```powershell
-git clone https://github.com/BlankHead/rick-mation.git "$env:USERPROFILE\.cursor\skills\rick-mation"
+git clone https://github.com/BlankHead2004/rick-mation.git "$env:USERPROFILE\.cursor\skills\rick-mation"
 ```
 
 macOS / Linux:
 
 ```bash
-git clone https://github.com/BlankHead/rick-mation.git ~/.cursor/skills/rick-mation
+git clone https://github.com/BlankHead2004/rick-mation.git ~/.cursor/skills/rick-mation
 ```
 
 Start a new Cursor agent chat after install.
