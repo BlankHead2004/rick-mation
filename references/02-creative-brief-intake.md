@@ -33,7 +33,15 @@ Use this as the intake schema (see also `schemas/creative-brief.schema.json` in 
 }
 ```
 
-All fields may be optional except topic/purpose and output requirements. Missing values should trigger a short internal defaulting procedure, not an invented high-level creative objective. If in doubt, ask the user — do not silently invent purpose, tone, or genre.
+All fields may be optional except topic/purpose and output requirements. Missing values should trigger a short internal defaulting procedure, not an invented high-level creative objective. If in doubt about **purpose, tone, or genre**, ask the user — do not silently invent those.
+
+### Do not solicit optional inputs
+
+`references`, `assets`, `content_sources`, `visual_preferences`, `visual_restrictions`, `must_include`, `must_avoid`, and `cta` are **optional**. An empty value is a valid, complete answer — not a gap to fill by interrogating the user.
+
+In particular: **never ask the user for a reference video.** The harness produces a complete visual language from the design system ([05-design-system-and-motion.md](05-design-system-and-motion.md)) and the layout template gallery ([17-layout-template-gallery.md](17-layout-template-gallery.md)) without any reference at all. A reference is an optional accelerant for users who happen to have one; its absence changes nothing about the pipeline's ability to run. If the user supplies none, set `references: []`, skip Phase 1 entirely, and proceed.
+
+Limit clarifying questions to things that genuinely block planning and cannot be defaulted — typically purpose, audience, tone, duration, and aspect ratio. Ask them in a single short batch, not one at a time, and only when the brief is too thin to proceed.
 
 ## Rules
 

@@ -85,7 +85,9 @@ A user provides a brief and a folder of assets and receives: a script, a scene p
 
 ## Reference style principle
 
-A user-supplied reference video is a **visual grammar reference, not a literal template.** Useful characteristics to extract: restrained composition, abundant negative space, typography-led communication, modular cards/panels, embedded video/media, diagrams built from simple geometry, limited accent colors, coherent motion language, progressive disclosure, strong narration-to-visual synchronization, reusable layout families. The exact palette, fonts, labels, logos, subject matter, pacing and content must always be derived from the user's own project — never blindly copied. See [16-reference-video-analysis.md](references/16-reference-video-analysis.md) for a worked example of turning a reference into implementation rules.
+**References are optional. Never ask the user for a reference video** — if none was supplied, set `references: []`, skip Phase 1, and derive the visual language from the design system ([05](references/05-design-system-and-motion.md)) and template gallery ([17](references/17-layout-template-gallery.md)) instead. Most projects run with no reference at all.
+
+When the user *does* supply one, a reference video is a **visual grammar reference, not a literal template.** Useful characteristics to extract: restrained composition, abundant negative space, typography-led communication, modular cards/panels, embedded video/media, diagrams built from simple geometry, limited accent colors, coherent motion language, progressive disclosure, strong narration-to-visual synchronization, reusable layout families. The exact palette, fonts, labels, logos, subject matter, pacing and content must always be derived from the user's own project — never blindly copied. See [16-reference-video-analysis.md](references/16-reference-video-analysis.md) for a worked example of turning a reference into implementation rules.
 
 ## Reference map
 
@@ -122,8 +124,8 @@ This is the condensed runbook; see [15-end-to-end-runbook.md](references/15-end-
 
 | Phase | Do | Produces |
 |---|---|---|
-| 0. Intake | Read brief, register references/assets, determine output settings & hard constraints, decide if voiceover is required | `creative_brief.json`, `asset_manifest.json` (registered, not yet processed) |
-| 1. Analyze references | Extract composition/typography/color/motion/transitions/audio/media-framing/density into rules, only if reference matching was requested | `reference_analysis.json` |
+| 0. Intake | Read brief, register whatever references/assets were supplied (never solicit more), determine output settings & hard constraints, decide if voiceover is required | `creative_brief.json`, `asset_manifest.json` (registered, not yet processed) |
+| 1. Analyze references | **Skip unless the user supplied reference media.** If they did, extract composition/typography/color/motion/transitions/audio/media-framing/density into rules | `reference_analysis.json` (`[]` when skipped) |
 | 2. Content model | Extract claims, facts, entities, sequences, numbers, key terms, attribution requirements from source docs | `content_map.json` |
 | 3. Director plan | Purpose statement, audience model, narrative structure, scene list, duration allocation ([03](references/03-director-story-planner.md)) | scene plan |
 | 4. Script | Write & validate narration; do not exceed target duration unless explicitly allowed | `final_script.md` |

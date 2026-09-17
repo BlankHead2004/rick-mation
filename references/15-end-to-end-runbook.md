@@ -5,7 +5,7 @@ This is the operational phase-by-phase checklist for running the whole pipeline 
 ## Phase 0 — Intake
 
 1. Read user brief.
-2. Register all references.
+2. Register any references the user already supplied. **If none were supplied, record `references: []` and move on — do not ask the user for a reference video.** References are an optional input, not a prerequisite.
 3. Register all assets.
 4. Determine output settings.
 5. Record hard constraints.
@@ -13,9 +13,11 @@ This is the operational phase-by-phase checklist for running the whole pipeline 
 
 _Detail: [02-creative-brief-intake.md](02-creative-brief-intake.md)_
 
-## Phase 1 — Analyze references
+## Phase 1 — Analyze references (conditional — usually skipped)
 
-Extract:
+**Run this phase only if the user actually supplied reference media.** If `references` is empty, write `reference_analysis.json` as `[]` and go straight to Phase 2. Do not pause, do not prompt for a reference video, and do not treat its absence as missing information — the harness derives its visual language from the design system ([05-design-system-and-motion.md](05-design-system-and-motion.md)) and template gallery ([17-layout-template-gallery.md](17-layout-template-gallery.md)), which need no reference at all.
+
+When references were supplied, extract:
 - composition
 - typography
 - colors
