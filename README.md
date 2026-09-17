@@ -47,9 +47,31 @@ Human review is optional editorial approval or targeted revision — not babysit
 
 ## Install
 
-The skill is a folder named `rick-mation` that contains `SKILL.md`. Put that folder in the **user skills** directory for the tool you use. Do not nest it extra (`skills/rick-mation/rick-mation` will not load).
+**Claude has two different skill systems. Pick the one that matches where you actually work.**
 
-### Claude Code (native)
+| Where you use Claude | How skills load | Method |
+|---|---|---|
+| Claude Code CLI | Reads your filesystem | Clone into `~/.claude/skills/` |
+| Claude Desktop → **Code** tab (Local/SSH session) | Reads your filesystem | Clone into `~/.claude/skills/` |
+| Claude Desktop → **Chat** tab | Syncs from your claude.ai account | **Upload ZIP** |
+| Claude Desktop → **Cowork** tab | Syncs from your claude.ai account | **Upload ZIP** |
+| claude.ai in a browser | Syncs from your claude.ai account | **Upload ZIP** |
+| Claude Code **cloud** sessions | Account skills + repo skills | Upload ZIP, or commit to repo `.claude/skills/` |
+| Cursor | Reads your filesystem | Clone into `~/.cursor/skills/` |
+
+The Chat and Cowork tabs **do not read `~/.claude/skills/`**, even though they are the same desktop app as the Code tab. Anthropic's docs are explicit: Cowork and cloud sessions source skills from the Customize configuration synced through your claude.ai account, not from the CLI's `~/.claude` directory. Dropping the folder on disk and seeing nothing happen is the expected result there, not a bug.
+
+### Method 1 — Filesystem (Claude Code CLI, Desktop Code tab, Cursor)
+
+The skill is a folder named `rick-mation` containing `SKILL.md`. The final path must be exactly:
+
+```text
+~/.claude/skills/rick-mation/SKILL.md
+```
+
+Not `~/.claude/skills/rick-mation/rick-mation/SKILL.md`. One extra wrapper folder is the most common install failure.
+
+Windows:
 
 ```powershell
 git clone https://github.com/BlankHead2004/rick-mation.git "$env:USERPROFILE\.claude\skills\rick-mation"
@@ -61,9 +83,28 @@ macOS / Linux:
 git clone https://github.com/BlankHead2004/rick-mation.git ~/.claude/skills/rick-mation
 ```
 
-Restart Claude Code or start a new session. Confirm with `/skills`. Trigger by asking for a motion-graphics video, or by naming **rick-mation**.
+Claude Code watches existing skill directories and picks up changes mid-session. If `~/.claude/skills/` did not exist before your session started, restart Claude Code. Verify by typing `/` and looking for `rick-mation`.
 
-If Claude Code was previously given a symlink at that path, remove it first (`rmdir` on Windows, `unlink` on Unix) and clone into a real directory. Staging scans often skip junction/symlink trees.
+Do not use a symlink or Windows junction here. Use a real directory — scans frequently skip linked trees. If you already made one, remove it first (`rmdir` on Windows, `unlink` on Unix), then clone.
+
+### Method 2 — ZIP upload (Desktop Chat/Cowork tabs, claude.ai, cloud sessions)
+
+1. Download [`rick-mation.zip`](rick-mation.zip) from this repo (or zip the folder yourself — the archive must contain `rick-mation/SKILL.md` one level down from the root, not a bare `SKILL.md`).
+2. Enable the runtime: **Settings → Capabilities → Code execution and file creation**. Skills require the code execution environment. On Team/Enterprise plans an owner enables this in **Organization settings → Skills** first.
+3. Open **Customize → Skills** in the Desktop sidebar (or **Settings → Capabilities → Skills** on claude.ai).
+4. Click **+**, choose **Create skill**, then **Upload a skill**, and select the ZIP.
+5. Confirm `rick-mation` appears in the list and is toggled **on**.
+6. Start a new conversation.
+
+Skills do not sync between surfaces. A ZIP uploaded to claude.ai is not available to Claude Code, and vice versa. If you want it in both, install both ways.
+
+### Method 3 — Commit to a repo (cloud sessions and teammates)
+
+Cloud sessions additionally load project skills from the cloned repository:
+
+```text
+<your-repo>/.claude/skills/rick-mation/SKILL.md
+```
 
 ### Cursor
 
@@ -79,17 +120,6 @@ git clone https://github.com/BlankHead2004/rick-mation.git ~/.cursor/skills/rick
 
 Start a new Cursor agent chat after install.
 
-### Project-local (optional)
-
-To share the skill with a single repo instead of all projects:
-
-```text
-<your-repo>/.claude/skills/rick-mation/     # Claude Code
-<your-repo>/.cursor/skills/rick-mation/     # Cursor
-```
-
-Clone or copy the same tree into that path.
-
 ### Update
 
 ```powershell
@@ -97,7 +127,18 @@ cd "$env:USERPROFILE\.claude\skills\rick-mation"   # or .cursor\skills\rick-mati
 git pull
 ```
 
-If you keep copies in both Claude Code and Cursor, they are independent. Pull in each place (or copy after editing).
+Copies are independent. Pull in each location you installed to. For a ZIP install, download the new ZIP and re-upload it through Customize → Skills.
+
+### If the skill will not load
+
+| Symptom | Cause |
+|---|---|
+| Nothing happens in Chat/Cowork after copying the folder | Those tabs never read `~/.claude/skills/`. Use the ZIP upload. |
+| Not listed in Claude Code | Path must be `~/.claude/skills/rick-mation/SKILL.md` with no extra wrapper folder |
+| Still not listed after creating the folder | `~/.claude/skills/` did not exist at session start — restart Claude Code |
+| Installed as a symlink/junction | Replace with a real directory |
+| ZIP upload rejected | Archive root must hold the `rick-mation/` folder, and `SKILL.md` must be spelled exactly |
+| Loads but never triggers | Name it directly: type `/` and pick `rick-mation` |
 
 ## Use it
 
