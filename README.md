@@ -4,6 +4,14 @@ Domain-neutral, AI-driven motion-graphics skill for Cursor and Claude Code.
 
 It turns a creative brief plus source assets into a deterministic, editable video — without hand-keyframing, and without letting the model freely author arbitrary animation code.
 
+## Briefing video
+
+<video src="https://github.com/BlankHead2004/rick-mation/raw/main/docs/briefing.mp4" controls muted playsinline width="720">
+  Your viewer can't play this inline — <a href="https://github.com/BlankHead2004/rick-mation/raw/main/docs/briefing.mp4">watch or download <code>docs/briefing.mp4</code></a>.
+</video>
+
+_A short walkthrough of what this skill does and how the pipeline fits together. Direct link: [`docs/briefing.mp4`](docs/briefing.mp4)._
+
 ```text
 user intent -> structured creative plan -> validated storyboard ->
 deterministic motion components -> synchronized audio -> render ->

@@ -5,6 +5,7 @@ Thumbs.db
 .env.*
 node_modules/
 *.mp4
+!docs/briefing.mp4
 *.wav
 *.png
 *.jpg
