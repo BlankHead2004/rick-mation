@@ -6,11 +6,9 @@ It turns a creative brief plus source assets into a deterministic, editable vide
 
 ## Briefing video
 
-<video src="https://github.com/BlankHead2004/rick-mation/raw/main/docs/briefing.mp4" controls muted playsinline width="720">
-  Your viewer can't play this inline — <a href="https://github.com/BlankHead2004/rick-mation/raw/main/docs/briefing.mp4">watch or download <code>docs/briefing.mp4</code></a>.
-</video>
+<video src="https://github.com/user-attachments/assets/604bb9a4-b2da-48d5-8f54-642a0dc8fa0b" controls muted playsinline width="720"></video>
 
-_A short walkthrough of what this skill does and how the pipeline fits together. Direct link: [`docs/briefing.mp4`](docs/briefing.mp4)._
+_A short walkthrough of what this skill does and how the pipeline fits together. The file also lives in the repo at [`docs/briefing.mp4`](docs/briefing.mp4)._
 
 ```text
 user intent -> structured creative plan -> validated storyboard ->
