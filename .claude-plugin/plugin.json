@@ -1,0 +1,22 @@
+{
+  "name": "rick-mation",
+  "displayName": "Rick-mation",
+  "version": "1.0.0",
+  "description": "Plan, storyboard, build, render, and validate deterministic motion-graphics videos with Remotion and FFmpeg.",
+  "author": {
+    "name": "BlankHead2004",
+    "url": "https://github.com/BlankHead2004"
+  },
+  "homepage": "https://github.com/BlankHead2004/rick-mation",
+  "repository": "https://github.com/BlankHead2004/rick-mation",
+  "keywords": [
+    "motion-graphics",
+    "remotion",
+    "video",
+    "storyboard",
+    "animation"
+  ],
+  "skills": [
+    "./"
+  ]
+}

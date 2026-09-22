@@ -53,64 +53,25 @@ Human review is optional editorial approval or targeted revision — not babysit
 
 ## Install
 
-**Claude has two different skill systems. Pick the one that matches where you actually work.**
+### Claude Code — marketplace (recommended)
 
-| Where you use Claude | How skills load | Method |
-|---|---|---|
-| Claude Code CLI | Reads your filesystem | Clone into `~/.claude/skills/` |
-| Claude Desktop → **Code** tab (Local/SSH session) | Reads your filesystem | Clone into `~/.claude/skills/` |
-| Claude Desktop → **Chat** tab | Syncs from your claude.ai account | **Upload ZIP** |
-| Claude Desktop → **Cowork** tab | Syncs from your claude.ai account | **Upload ZIP** |
-| claude.ai in a browser | Syncs from your claude.ai account | **Upload ZIP** |
-| Claude Code **cloud** sessions | Account skills + repo skills | Upload ZIP, or commit to repo `.claude/skills/` |
-| Cursor | Reads your filesystem | Clone into `~/.cursor/skills/` |
-
-The Chat and Cowork tabs **do not read `~/.claude/skills/`**, even though they are the same desktop app as the Code tab. Anthropic's docs are explicit: Cowork and cloud sessions source skills from the Customize configuration synced through your claude.ai account, not from the CLI's `~/.claude` directory. Dropping the folder on disk and seeing nothing happen is the expected result there, not a bug.
-
-### Method 1 — Filesystem (Claude Code CLI, Desktop Code tab, Cursor)
-
-The skill is a folder named `rick-mation` containing `SKILL.md`. The final path must be exactly:
+Run these commands inside Claude Code:
 
 ```text
-~/.claude/skills/rick-mation/SKILL.md
+/plugin marketplace add BlankHead2004/rick-mation
+/plugin install rick-mation@rick-mation-marketplace
+/reload-plugins
 ```
 
-Not `~/.claude/skills/rick-mation/rick-mation/SKILL.md`. One extra wrapper folder is the most common install failure.
+The final command is only needed when Claude Code asks for it. Updates are available through the plugin manager after the marketplace refreshes.
 
-Windows:
+### Claude Desktop Chat/Cowork and claude.ai
 
-```powershell
-git clone https://github.com/BlankHead2004/rick-mation.git "$env:USERPROFILE\.claude\skills\rick-mation"
-```
+1. Download [`rick-mation.zip`](rick-mation.zip).
+2. Open **Customize → Skills → + → Upload a skill**.
+3. Upload the ZIP, enable `rick-mation`, and start a new chat.
 
-macOS / Linux:
-
-```bash
-git clone https://github.com/BlankHead2004/rick-mation.git ~/.claude/skills/rick-mation
-```
-
-Claude Code watches existing skill directories and picks up changes mid-session. If `~/.claude/skills/` did not exist before your session started, restart Claude Code. Verify by typing `/` and looking for `rick-mation`.
-
-Do not use a symlink or Windows junction here. Use a real directory — scans frequently skip linked trees. If you already made one, remove it first (`rmdir` on Windows, `unlink` on Unix), then clone.
-
-### Method 2 — ZIP upload (Desktop Chat/Cowork tabs, claude.ai, cloud sessions)
-
-1. Download [`rick-mation.zip`](rick-mation.zip) from this repo (or zip the folder yourself — the archive must contain `rick-mation/SKILL.md` one level down from the root, not a bare `SKILL.md`).
-2. Enable the runtime: **Settings → Capabilities → Code execution and file creation**. Skills require the code execution environment. On Team/Enterprise plans an owner enables this in **Organization settings → Skills** first.
-3. Open **Customize → Skills** in the Desktop sidebar (or **Settings → Capabilities → Skills** on claude.ai).
-4. Click **+**, choose **Create skill**, then **Upload a skill**, and select the ZIP.
-5. Confirm `rick-mation` appears in the list and is toggled **on**.
-6. Start a new conversation.
-
-Skills do not sync between surfaces. A ZIP uploaded to claude.ai is not available to Claude Code, and vice versa. If you want it in both, install both ways.
-
-### Method 3 — Commit to a repo (cloud sessions and teammates)
-
-Cloud sessions additionally load project skills from the cloned repository:
-
-```text
-<your-repo>/.claude/skills/rick-mation/SKILL.md
-```
+Code execution must be enabled for skills. Chat/Cowork does not load skills from `~/.claude/skills/`.
 
 ### Cursor
 
@@ -118,33 +79,23 @@ Cloud sessions additionally load project skills from the cloned repository:
 git clone https://github.com/BlankHead2004/rick-mation.git "$env:USERPROFILE\.cursor\skills\rick-mation"
 ```
 
-macOS / Linux:
+macOS/Linux:
 
 ```bash
 git clone https://github.com/BlankHead2004/rick-mation.git ~/.cursor/skills/rick-mation
 ```
 
-Start a new Cursor agent chat after install.
+Start a new agent chat after installation.
 
-### Update
+### Manual Claude Code install
 
-```powershell
-cd "$env:USERPROFILE\.claude\skills\rick-mation"   # or .cursor\skills\rick-mation
-git pull
+If marketplace installation is unavailable, clone the repository into:
+
+```text
+~/.claude/skills/rick-mation
 ```
 
-Copies are independent. Pull in each location you installed to. For a ZIP install, download the new ZIP and re-upload it through Customize → Skills.
-
-### If the skill will not load
-
-| Symptom | Cause |
-|---|---|
-| Nothing happens in Chat/Cowork after copying the folder | Those tabs never read `~/.claude/skills/`. Use the ZIP upload. |
-| Not listed in Claude Code | Path must be `~/.claude/skills/rick-mation/SKILL.md` with no extra wrapper folder |
-| Still not listed after creating the folder | `~/.claude/skills/` did not exist at session start — restart Claude Code |
-| Installed as a symlink/junction | Replace with a real directory |
-| ZIP upload rejected | Archive root must hold the `rick-mation/` folder, and `SKILL.md` must be spelled exactly |
-| Loads but never triggers | Name it directly: type `/` and pick `rick-mation` |
+The final file must be `~/.claude/skills/rick-mation/SKILL.md`. Use a real directory, not a symlink or junction.
 
 ## Use it
 
@@ -152,6 +103,8 @@ Ask the agent something like:
 
 - “Use rick-mation to make a 90-second explainer from this brief and this asset folder.”
 - “Storyboard and render a product walkthrough at 1920×1080, 30 fps.”
+
+With the Claude Code plugin, invoke it explicitly as `/rick-mation:rick-mation`, or describe a matching motion-graphics task and let Claude trigger it automatically.
 
 The agent should:
 
@@ -166,6 +119,7 @@ A complete build includes `final.mp4`, `storyboard.json`, `final_script.md`, `as
 
 ```text
 rick-mation/
+├── .claude-plugin/         # Claude plugin and marketplace manifests
 ├── SKILL.md                 # Entry point (keep this; agents read it first)
 ├── README.md                # You are here
 ├── references/              # Modular instruction set (01–17)
